@@ -47,7 +47,7 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "Pet object that needs to be added to the store"
+        description: "Nomination object that needs to be added to the DB"
         required: true
         schema:
           $ref: "#/definitions/Nomination"
