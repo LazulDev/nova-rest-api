@@ -4,7 +4,6 @@ import helmet from 'helmet';
 import mongoose from 'mongoose';
 import compression from 'compression';
 import cors from 'cors';
-import * as dotenv from 'dotenv';
 import indexRoutes from './routes/index-routes';
 import nominationsRoutes from './routes/nominations-routes';
 

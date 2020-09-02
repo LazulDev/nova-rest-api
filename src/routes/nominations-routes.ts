@@ -1,6 +1,8 @@
-import { Request, Response, Router, Errback } from 'express';
-import Nomination from '../models/nomination.model';
+import { Request, Response, Router, NextFunction } from 'express';
 import nodemailer from 'nodemailer';
+
+import Nomination from '../models/nomination.model';
+
 class NominationRoutes {
 
     router: Router;
@@ -9,10 +11,10 @@ class NominationRoutes {
         this.router = Router();
         this.routes();
     }
-    private async createNomination(req: Request, res: Response) {
+    private async createNomination( req: Request, res: Response, next: NextFunction ) {
         // console.log('body', req.body);
-        const { candidate, details, nominatedBy, involvementScore, overallTalentScore } = req.body;
-        if (involvementScore < 8 || overallTalentScore < 8) {
+        const { candidate, details, referrer, involvementScore, overallTalentScore } = req.body;
+        if ( overallTalentScore < 8) {
             try {
                 const { user, pass } = await nodemailer.createTestAccount();
                 console.log({ user, pass });
@@ -42,22 +44,29 @@ class NominationRoutes {
                 res.json({ error: 'Not enough score'});
             } catch (error)  {
                 console.error('Error al enviar email: ', error);
+                next(error);
             }
         } else {
             try {
-                const nominationToCreate = new Nomination({ candidate, details, nominatedBy, involvementScore, overallTalentScore });
+                const nominationToCreate = new Nomination({ candidate, details, referrer, involvementScore, overallTalentScore });
                 const resp = await nominationToCreate.save()
                 res.send(resp);
             } catch (error) {
-                res.status(400)
-                    .json({ error })
-                console.log('Se ha producido el siguiente error: ', error)
+                if (error.name === 'MongoError') {
+                    res.status(400)
+                    res.json({
+                        message: error.message,
+                        stack: process.env.NODE_ENV === 'production' ? '👻' : error.stack,
+                    });
+                } else {
+                    next(error);
+                }
             }
 
         }
     }
 
-    private async getNominations(req: Request, res: Response, callback: Errback) {
+    private async getNominations(req: Request, res: Response ) {
         // const { page, limit } = req.query;
         // if (page && limit) {
             const nominations = await Nomination.find();

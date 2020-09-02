@@ -7,6 +7,7 @@ var validateEmail = function(email: string) {
 const nominationSchema = new Schema({
     candidate: { 
         type: String,
+        index: { unique: true },
         trim: true,
         lowercase: true,
         required: 'Candidate\'s email address is required',
@@ -14,9 +15,9 @@ const nominationSchema = new Schema({
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
     },
     details: { type: String, required: true },
-    involvementScore: { type: Number, required: true },
-    overallTalentScore: { type: Number, required: true },
-    nominatedBy: { 
+    involvementScore: { type: Number, min: 0, max: 10, required: true },
+    overallTalentScore: { type: Number, min: 0, max: 10, required: true },
+    referrer: { 
         type: String,
         trim: true,
         lowercase: true,
