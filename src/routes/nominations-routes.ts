@@ -1,49 +1,67 @@
 import { Request, Response, Router, NextFunction } from 'express';
 import nodemailer from 'nodemailer';
-
+import * as dotenv from 'dotenv';
 import Nomination from '../models/nomination.model';
-
+type ApiError = {
+    message: string,
+    code: string,
+    stack?: string,
+};
 class NominationRoutes {
 
     router: Router;
-
+    
     constructor() {
         this.router = Router();
         this.routes();
+        dotenv.config();
     }
     private async createNomination( req: Request, res: Response, next: NextFunction ) {
-        // console.log('body', req.body);
         const { candidate, details, referrer, involvementScore, overallTalentScore } = req.body;
-        if ( overallTalentScore < 8) {
+
+        if ( overallTalentScore < 8 ) {
             try {
-                const { user, pass } = await nodemailer.createTestAccount();
-                console.log({ user, pass });
+                // GMAIL transport config
+                // {
+                //     service: process.env.EMAIL_SERVICE || 'gmail',
+                //     auth: { user: process.env.EMAIL, pass: process.env.PASSWORD },
+                //     tls: {
+                //         rejectUnauthorized: false
+                //     }
+                // }
                 const transporter = nodemailer.createTransport({
-                    host: "smtp.ethereal.email",
-                    port: 587,
-                    secure: false,
-                    auth: { user, pass },
+                    service: process.env.EMAIL_SERVICE || 'gmail',
+                    auth: { user: process.env.EMAIL, pass: process.env.PASSWORD },
                     tls: {
                         rejectUnauthorized: false
                     }
-                }, );
-
-                // send mail with defined transport object
-                let info = await transporter.sendMail({
-                    from: `do-not-reply <${user}>`, // sender address
-                    to: "msanchez.telecom@gmail.com, mscarvajal93@gmail.com", // list of receivers
-                    subject: "Hello ✔", // Subject line
-                    // text: "Hello world?", // plain text body
-                    html: "<b>Hello world?</b>", // html body
                 });
-
-                console.log("Message sent: %s", info.messageId);
-                console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-    
+                
+                let info = await transporter.sendMail({
+                    from: `do-not-reply <${ process.env.EMAIL }>`, // sender address
+                    to: `${referrer}, ${candidate}`, // list of receivers
+                    subject: 'Nomination\'s info',
+                    html: `
+                    <h1>We are sorry to say that</h1>
+                    <h3>Your nomination has been rejected</h3>
+                    <p>The nominee overall score is not enough</p>
+                    `,
+                });
+                console.log('Message sent: %s', info.messageId);
+                console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+                const error: ApiError = {
+                    message: 'Not enough score',
+                    code: '002'
+                };
                 res.status(405);
-                res.json({ error: 'Not enough score'});
+                res.json(error);
             } catch (error)  {
-                console.error('Error al enviar email: ', error);
+                const errorResponse: ApiError = {
+                    message: 'An error has occurred while sending email',
+                    code: '004',
+                    stack: process.env.NODE_ENV === 'production' ? '👻' : error.stack,
+                }
+                res.status(500).json(errorResponse)
                 next(error);
             }
         } else {
@@ -53,11 +71,13 @@ class NominationRoutes {
                 res.send(resp);
             } catch (error) {
                 if (error.name === 'MongoError') {
-                    res.status(400)
-                    res.json({
+                    const errorMesage: ApiError = {
                         message: error.message,
+                        code: '001',
                         stack: process.env.NODE_ENV === 'production' ? '👻' : error.stack,
-                    });
+                    }
+                    res.status(400);
+                    res.json( errorMesage );
                 } else {
                     next(error);
                 }
@@ -67,27 +87,43 @@ class NominationRoutes {
     }
 
     private async getNominations(req: Request, res: Response ) {
-        // const { page, limit } = req.query;
-        // if (page && limit) {
-            const nominations = await Nomination.find();
-            // const nominations = await Nomination.find({page, limit});
-            res.json(nominations);
-        // } else {
-        //     res.status(400)
-        //         .json({
-        //             error: 'Page and limit are mandatory request parameters'
-        //         });
-        // }
+        const nominations = await Nomination.find();
+        res.json(nominations);
+    }
+
+    private async deleteNominationByCandidate( req : Request, res: Response ) {
+        console.log(req)
+        const candidate = req.query['candidate'];
+        console.log('candidate', candidate)
+        if ( !candidate ) {
+            const errorResponse: ApiError = {
+                message: 'Candidate email is a mandatory query param',
+                code: '003'
+            }
+            res.status(400)
+            res.json(errorResponse)
+        } else {
+            const response = await Nomination.findOneAndDelete({candidate});
+            if (response) {
+                res.end();
+            } else {
+                const errorResponse: ApiError = {
+                    message: 'Candidate not found in DB',
+                    code: '003'
+                }
+                res.status(404)
+                res.json(errorResponse);
+            }
+        }
     }
 
 
     routes() {
         this.router.post('', this.createNomination);
         this.router.get('/all', this.getNominations);
+        this.router.delete('/', this.deleteNominationByCandidate);
     }
 
-    async sendEmail() {
-         }
 }
 
 const nominationsRoutes = new NominationRoutes();

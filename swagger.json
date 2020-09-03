@@ -1,0 +1,179 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a sample server for NovaTalent candidates nomination management.  You can find out more about     NovaTalent at [http://novatalent.com](http://novatalent.com)",
+    "version": "1.0.0",
+    "title": "Nova RESTful API",
+    "contact": {
+      "email": "msanchez.telecom@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "novatalent.com",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "nomination",
+      "description": "Create and retrive candidate's nomination"
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/nomination/all": {
+      "get": {
+        "tags": [
+          "nomination"
+        ],
+        "summary": "Finds all the nominations in the DB",
+        "description": "",
+        "operationId": "getAllNominations",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Nomination"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/nomination": {
+      "post": {
+        "tags": [
+          "nomination"
+        ],
+        "summary": "Add a new nomination for a non-registered cadidate",
+        "description": "",
+        "operationId": "createNomination",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Nomination object that needs to be added to the DB",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Nomination"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "items": {
+                "$ref": "#/definitions/Nomination"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "schema": {
+              "type": "object",
+              "items": {
+                "$ref": "#/definitions/ApiError"
+              }
+            }
+          },
+          "405": {
+            "description": "Invalid input",
+            "schema": {
+              "type": "object",
+              "items": {
+                "$ref": "#/definitions/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Nomination": {
+      "type": "object",
+      "required": [
+        "candidate",
+        "description",
+        "referrer",
+        "involvementScore",
+        "overallTalentScore"
+      ],
+      "properties": {
+        "candidate": {
+          "type": "string",
+          "format": "email",
+          "example": "example@novatalent.com"
+        },
+        "description": {
+          "type": "string",
+          "example": "I would like to recommend my friend David as a Nova because of his outstanding skills"
+        },
+        "referrer": {
+          "type": "string",
+          "format": "email",
+          "example": "example@gmail.com"
+        },
+        "involvementScore": {
+          "type": "number",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 10,
+          "example": 9
+        },
+        "overallTalentScore": {
+          "type": "number",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 10,
+          "example": 10
+        }
+      }
+    },
+    "ApiError": {
+      "type": "object",
+      "required": [
+        "message",
+        "code"
+      ],
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "E11000 duplicate key error collection",
+          "description": "Reason for which the error occurred"
+        },
+        "code": {
+          "type": "string",
+          "example": 1,
+          "description": "Standarized error code"
+        },
+        "stack": {
+          "type": "string",
+          "example": "MongoError: E11000 duplicate key error collection: novarestapi.nominations index: candidate_1 dup key: { candidate: \"maria@maria.es\" }\n    at Function.create (C:\\Users\\User\\Some\\Path\\node_modules\\mongodb\\lib\\core\\error.js:57:12)\n",
+          "description": "If dev mode is enable this field is retrived and provides information about the error stack trace"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about NovaTalent",
+    "url": "https://novatalent.com/"
+  }
+}

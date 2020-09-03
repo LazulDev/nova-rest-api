@@ -63,13 +63,13 @@ paths:
           schema:
             type: "object"
             items:
-              $ref: "#/definitions/Error"
+              $ref: "#/definitions/ApiError"
         "405":
           description: "Invalid input"
           schema:
             type: "object"
             items:
-              $ref: "#/definitions/Error"
+              $ref: "#/definitions/ApiError"
 definitions:
   Nomination:
     type: "object"
@@ -103,7 +103,7 @@ definitions:
         minimum: 0
         maximum: 10
         example: 10
-  Error:
+  ApiError:
     type: "object"
     required:
     - "message"
@@ -114,10 +114,9 @@ definitions:
         example: "E11000 duplicate key error collection"
         description: "Reason for which the error occurred"
       code:
-        type: "number"
-        format: int32
-        example: 11000
-        description: "MongoDB error code if it exists"
+        type: "string"
+        example: 001
+        description: "Standarized error code"
       stack:
         type: "string"
         example: "MongoError: E11000 duplicate key error collection: novarestapi.nominations index: candidate_1 dup key: { candidate: \"maria@maria.es\" }\n    at Function.create (C:\\Users\\User\\Some\\Path\\node_modules\\mongodb\\lib\\core\\error.js:57:12)\n"

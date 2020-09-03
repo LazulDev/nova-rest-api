@@ -45,7 +45,9 @@ class Server {
 
     start(){
         this.app.listen(this.app.get('port'));
-        console.log(`Server listening on port ${ this.app.get('port')}`);
+        console.log(`Server listening on http://localhost:${ this.app.get('port')}`);
+        console.log(`Mode ${process.env.NODE_ENV}`)
+        console.log('Press Ctrl+C to quit.');
     }
 
 }
