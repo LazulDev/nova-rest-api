@@ -12,14 +12,18 @@
 
 > REST API for NovaTalent candidates nomination management
 
+STACK
+
+
 ### ✨ [Documentation](https://app.swaggerhub.com/apis/mariasanchezc/nova-rest_api/1.0.0)
 
 ### ✏️ Prerequisites
 
-For development, you will only need Node.js, a node global package such as npm or yarn installed in your environement and mongoDB also. i. e. in my case:
+For development, you will only need Node.js, a node global package such as npm or yarn installed in your environment and mongoDB. i. e.:
 
-- node 12.x Download it here [here](https://nodejs.org/en/download/)
-- mongoDB. Download it here [here](https://www.mongodb.com/try)
+- npm 6.13.4
+- node 12.x Download it [here](https://nodejs.org/en/download/)
+- mongoDB. Download it [here](https://www.mongodb.com/try)
 
 ### 🔧 Install
 
@@ -34,7 +38,7 @@ mongod
 
 ### 📋 Usage
 
-## Simple build for production
+#### Simple build for production
 
 ```sh
 npm run start
@@ -51,14 +55,14 @@ npm run dev
 ```
 ### 🛑 Important
 
-In order to send emails to the candidates and the referrer you'll need to cread a .env file in root directory with the following fields
+In order to send emails to candidate and referrer you'll need to create a .env file in the root directory as follows:
 ```console
 EMAIL=*from email*
 PASSWORD=*from email password*
 EMAIL_SERVICE=*from email host p.e. gmail*
 NODE_ENV=*development or production*
 ```
-Example
+Example:
 ```console
 EMAIL=do-not-reply@novatalent.com
 PASSWORD=thisisafakepassword666
@@ -66,16 +70,16 @@ EMAIL_SERVICE=novatalent
 NODE_ENV=development
 ```
 
-## Author
+### Author
 
 👤 **María Sánchez**
 
 * Github: [@mariasanchezc](https://github.com/mariasanchezc)
 
-## 🤝 Contributing
+### 🤝 Contributing
 
 Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/mariasanchezc/nova-rest-api/issues). 
 
-## Show your support
+### Show your support
 
 Give a ⭐️ if this project helped you!
