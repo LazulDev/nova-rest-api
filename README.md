@@ -11,9 +11,15 @@
 </p>
 
 > REST API for NovaTalent candidates nomination management
-
-STACK
-
+<h2>Stack</h2>
+<p>
+  <img align="left" alt="TypeScript" width="26px" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/typescript/typescript.png" />
+  <img align="left" alt="Node.js" width="26px" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/nodejs/nodejs.png" />
+  <img align="left" alt="Express" width="26px" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/express/express.png" />
+  <img align="left" alt="MongoDB" width="26px" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/mongodb/mongodb.png" />
+</p>
+<br />
+<br />
 
 ### ✨ [Documentation](https://app.swaggerhub.com/apis/mariasanchezc/nova-rest_api/1.0.0)
 
@@ -28,12 +34,15 @@ For development, you will only need Node.js, a node global package such as npm o
 ### 🔧 Install
 
 Install dependencies
+
 ```sh
 npm install
 ```
+
 Start mongo with
+
 ```sh
-mongod 
+mongod
 ```
 
 ### 📋 Usage
@@ -45,24 +54,32 @@ npm run start
 ```
 
 For dev porposes you can also try both
+
 - Start transpiling in watch mode the TypeScript code as you code
+
 ```sh
 npm run watch
 ```
+
 - While nodemon serves the app
+
 ```sh
 npm run dev
 ```
+
 ### 🛑 Important
 
 In order to send emails to candidate and referrer you'll need to create a .env file in the root directory as follows:
+
 ```console
 EMAIL=*from email*
 PASSWORD=*from email password*
 EMAIL_SERVICE=*from email host p.e. gmail*
 NODE_ENV=*development or production*
 ```
+
 Example:
+
 ```console
 EMAIL=do-not-reply@novatalent.com
 PASSWORD=thisisafakepassword666
@@ -74,11 +91,11 @@ NODE_ENV=development
 
 👤 **María Sánchez**
 
-* Github: [@mariasanchezc](https://github.com/mariasanchezc)
+- Github: [@mariasanchezc](https://github.com/mariasanchezc)
 
 ### 🤝 Contributing
 
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/mariasanchezc/nova-rest-api/issues). 
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/mariasanchezc/nova-rest-api/issues).
 
 ### Show your support
 
