@@ -5,45 +5,8 @@ var validateEmail = function(email: string) {
     return re.test(email);
 };
 
-/**
- * @swagger
- *  components:
-*      schemas:
-*         Nomination:
-*            type: "object"
-*            required:
-*               - "candidate"
-*               - "description"
-*               - "referrer"
-*               - "involvementScore"
-*               - "overallTalentScore"
-*          properties:
-*           candidate:
-*               type: "string"
-*               format: "email"
-*               example: "example@novatalent.com"
-*           description:
-*               type: "string"
-*               example: "I would like to recommend my friend David as a Nova because of his outstanding skills"
-*           referrer:
-*               type: "string"
-*               format: "email"
-*               example: "example@gmail.com"
-*           involvementScore:
-*               type: "number"
-*               format: "int32"
-*               minimum: 0
-*               maximum: 10
-*               example: 9
-*           overallTalentScore:
-*               type: "number"
-*               format: "int32"
-*               minimum: 0
-*               maximum: 10
-*               example: 10
-*/  
 const nominationSchema = new Schema({
-    candidate: { 
+    candidate: {
         type: String,
         index: { unique: true },
         trim: true,
@@ -55,7 +18,7 @@ const nominationSchema = new Schema({
     details: { type: String, required: true },
     involvementScore: { type: Number, min: 0, max: 10, required: true },
     overallTalentScore: { type: Number, min: 0, max: 10, required: true },
-    referrer: { 
+    referrer: {
         type: String,
         trim: true,
         lowercase: true,
